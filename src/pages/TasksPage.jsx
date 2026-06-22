@@ -3,38 +3,38 @@ import { FiPlus, FiTrash2, FiCheckCircle, FiCircle, FiList, FiClock, FiCheckSqua
 
 const TasksPage = () => {
   // --- State ---
-const demoTasks = [
-  {
-    id: 1,
-    title: "Complete Digital Heroes Assignment",
-    completed: true,
-    createdAt: "Jun 22, 2026",
-  },
-  {
-    id: 2,
-    title: "Prepare React Interview Questions",
-    completed: false,
-    createdAt: "Jun 22, 2026",
-  },
-  {
-    id: 3,
-    title: "Deploy FocusForge on Vercel",
-    completed: false,
-    createdAt: "Jun 22, 2026",
-  },
-];
+  const demoTasks = [
+    {
+      id: 1,
+      title: "Complete Digital Heroes Assignment",
+      completed: true,
+      createdAt: "Jun 22, 2026",
+    },
+    {
+      id: 2,
+      title: "Prepare React Interview Questions",
+      completed: false,
+      createdAt: "Jun 22, 2026",
+    },
+    {
+      id: 3,
+      title: "Deploy FocusForge on Vercel",
+      completed: false,
+      createdAt: "Jun 22, 2026",
+    },
+  ];
 
-const [tasks, setTasks] = useState(() => {
-  try {
-    const savedTasks = localStorage.getItem("focusforge_tasks");
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const savedTasks = localStorage.getItem("focusforge_tasks");
 
-    return savedTasks
-      ? JSON.parse(savedTasks)
-      : demoTasks;
-  } catch {
-    return demoTasks;
-  }
-});
+      return savedTasks
+        ? JSON.parse(savedTasks)
+        : demoTasks;
+    } catch {
+      return demoTasks;
+    }
+  });
 
   const [taskTitle, setTaskTitle] = useState('');
 
@@ -132,17 +132,17 @@ const [tasks, setTasks] = useState(() => {
 
         {/* --- Task Input Section --- */}
         <form onSubmit={handleAddTask} className="backdrop-blur-md bg-slate-900/40 border border-slate-800/60 rounded-xl p-4 shadow-xl">
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
               placeholder="Add a new task to your forge..."
-              className="flex-1 bg-slate-950/60 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30 transition-all"
+              className="w-full flex-1 bg-slate-950/60 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30 transition-all"
             />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-lg shadow-blue-600/10 transition-all duration-200 active:scale-95 shrink-0"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm px-5 py-2.5 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-600/10 transition-all duration-200 active:scale-95 shrink-0"
             >
               <FiPlus size={16} />
               <span>Add Task</span>
