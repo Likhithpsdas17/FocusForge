@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiUser, FiTarget, FiSave, FiRefreshCw, FiCheckCircle } from 'react-icons/fi';
+import { FiUser, FiTarget, FiSave, FiRefreshCw, FiCheckCircle, FiDownload } from 'react-icons/fi';
 
 const SettingsPage = () => {
   // --- State ---
@@ -9,6 +9,7 @@ const SettingsPage = () => {
     dailyPomodoroGoal: 4,
   });
 
+  const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
 
   // --- Load Settings ---
@@ -18,6 +19,13 @@ const SettingsPage = () => {
       setSettings(JSON.parse(savedSettings));
     }
   }, []);
+
+  // --- Helpers ---
+  const triggerToast = (message) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   // --- Handlers ---
   const handleChange = (e) => {
@@ -31,8 +39,7 @@ const SettingsPage = () => {
   const handleSave = (e) => {
     e.preventDefault();
     localStorage.setItem('focusforge_settings', JSON.stringify(settings));
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    triggerToast('Configuration saved successfully!');
   };
 
   const handleReset = () => {
@@ -43,8 +50,39 @@ const SettingsPage = () => {
     };
     setSettings(defaultSettings);
     localStorage.setItem('focusforge_settings', JSON.stringify(defaultSettings));
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    triggerToast('Configuration restored to defaults!');
+  };
+
+  const handleExportData = () => {
+    try {
+      // Fetch all core system data from storage matrices
+      const savedTasks = localStorage.getItem('focusforge_tasks');
+      const savedSessions = localStorage.getItem('focusforge_pomodoro_sessions');
+      const savedInterviews = localStorage.getItem('focusforge_interviews');
+      const savedSettings = localStorage.getItem('focusforge_settings');
+
+      // Compile consolidated engine backup object
+      const backupData = {
+        focusforge_tasks: savedTasks ? JSON.parse(savedTasks) : [],
+        focusforge_pomodoro_sessions: savedSessions ? parseInt(savedSessions, 10) : 0,
+        focusforge_interviews: savedInterviews ? JSON.parse(savedInterviews) : [],
+        focusforge_settings: savedSettings ? JSON.parse(savedSettings) : settings,
+        exportedAt: new Date().toISOString()
+      };
+
+      // Construct and pipeline data down as a serialised blob file
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "focusforge-backup.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      triggerToast('Backup exported successfully');
+    } catch (error) {
+      console.error('Failed to parse or pipeline internal storage cluster telemetry during export:', error);
+    }
   };
 
   return (
@@ -54,7 +92,7 @@ const SettingsPage = () => {
       {showToast && (
         <div className="fixed top-6 right-6 z-50 flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md text-emerald-400 text-sm font-medium px-4 py-3 rounded-xl shadow-2xl animate-fade-in-down">
           <FiCheckCircle size={18} />
-          <span>Configuration saved successfully!</span>
+          <span>{toastMessage}</span>
         </div>
       )}
 
@@ -66,7 +104,7 @@ const SettingsPage = () => {
             Settings
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Customize your engine thresholds, target matrices, and system profile.
+            Customize your profile, productivity goals, and application settings.
           </p>
         </div>
 
@@ -75,7 +113,7 @@ const SettingsPage = () => {
           {/* --- Configuration Form Card --- */}
           <div className="lg:col-span-2 backdrop-blur-md bg-slate-900/40 border border-slate-800/60 rounded-xl p-6 shadow-xl space-y-6">
             <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <FiUser className="text-blue-400" size={16} /> Identity & Engine Targets
+              <FiUser className="text-blue-400" size={16} /> Profile & Goals
             </h2>
 
             <form onSubmit={handleSave} className="space-y-5">
@@ -143,44 +181,62 @@ const SettingsPage = () => {
             </form>
           </div>
 
-          {/* --- Live Telemetry Preview Card --- */}
-          <div className="backdrop-blur-md bg-gradient-to-b from-slate-900/40 to-slate-900/10 border border-slate-800/60 rounded-xl p-6 shadow-xl space-y-6">
-            <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <FiTarget className="text-amber-400" size={16} /> Live Preview
-            </h3>
+          {/* --- Live Telemetry Preview & Data Utility Card --- */}
+          <div className="space-y-6">
+            <div className="backdrop-blur-md bg-gradient-to-b from-slate-900/40 to-slate-900/10 border border-slate-800/60 rounded-xl p-6 shadow-xl space-y-6">
+              <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <FiTarget className="text-amber-400" size={16} /> Live Preview
+              </h3>
 
-            <div className="space-y-4">
-              <div className="p-4 bg-slate-950/40 border border-slate-800/40 rounded-lg">
-                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Active Operator</span>
-                <span className="text-lg font-bold text-white mt-1 block truncate">
-                  {settings.name || <span className="text-slate-600 italic">Unspecified</span>}
-                </span>
-              </div>
-
-              <div className="p-4 bg-slate-950/40 border border-slate-800/40 rounded-lg flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Task Target</span>
-                  <span className="text-xs text-slate-400 mt-0.5 block">Objectives per day</span>
+              <div className="space-y-4">
+                <div className="p-4 bg-slate-950/40 border border-slate-800/40 rounded-lg">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Active Operator</span>
+                  <span className="text-lg font-bold text-white mt-1 block truncate">
+                    {settings.name || <span className="text-slate-600 italic">Unspecified</span>}
+                  </span>
                 </div>
-                <span className="text-xl font-black text-blue-400 font-mono bg-slate-900 px-3 py-1 rounded border border-slate-800">
-                  {settings.dailyTasksGoal}
-                </span>
-              </div>
 
-              <div className="p-4 bg-slate-950/40 border border-slate-800/40 rounded-lg flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Focus Target</span>
-                  <span className="text-xs text-slate-400 mt-0.5 block">Sessions per day</span>
+                <div className="p-4 bg-slate-950/40 border border-slate-800/40 rounded-lg flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Task Target</span>
+                    <span className="text-xs text-slate-400 mt-0.5 block">Objectives per day</span>
+                  </div>
+                  <span className="text-xl font-black text-blue-400 font-mono bg-slate-900 px-3 py-1 rounded border border-slate-800">
+                    {settings.dailyTasksGoal}
+                  </span>
                 </div>
-                <span className="text-xl font-black text-amber-400 font-mono bg-slate-900 px-3 py-1 rounded border border-slate-800">
-                  {settings.dailyPomodoroGoal}
-                </span>
+
+                <div className="p-4 bg-slate-950/40 border border-slate-800/40 rounded-lg flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Focus Target</span>
+                    <span className="text-xs text-slate-400 mt-0.5 block">Sessions per day</span>
+                  </div>
+                  <span className="text-xl font-black text-amber-400 font-mono bg-slate-900 px-3 py-1 rounded border border-slate-800">
+                    {settings.dailyPomodoroGoal}
+                  </span>
+                </div>
               </div>
+              
+              <p className="text-[11px] text-slate-500 text-center leading-relaxed">
+                These values feed directly into your localized dashboard progress metrics and threshold caps.
+              </p>
             </div>
-            
-            <p className="text-[11px] text-slate-500 text-center leading-relaxed">
-              These values feed directly into your localized dashboard progress metrics and threshold caps.
-            </p>
+
+            {/* --- Data Utility Management Card --- */}
+            <div className="backdrop-blur-md bg-slate-900/40 border border-slate-800/60 rounded-xl p-5 shadow-xl space-y-4">
+              <div>
+                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Data Management</h4>
+                <p className="text-[11px] text-slate-500 mt-0.5">Download a backup of your FocusForge data.</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleExportData}
+                className="w-full inline-flex items-center justify-center gap-2 bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 hover:text-white font-medium text-xs px-4 py-3 rounded-lg transition-all active:scale-[0.98] shadow-md shadow-black/20"
+              >
+                <FiDownload size={14} className="text-blue-400" />
+                <span>Export My Data</span>
+              </button>
+            </div>
           </div>
 
         </div>

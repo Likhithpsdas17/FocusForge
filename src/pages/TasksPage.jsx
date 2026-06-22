@@ -3,14 +3,14 @@ import { FiPlus, FiTrash2, FiCheckCircle, FiCircle, FiList, FiClock, FiCheckSqua
 
 const TasksPage = () => {
   // --- State ---
-const [tasks, setTasks] = useState(() => {
-  try {
-    const savedTasks = localStorage.getItem("focusforge_tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  } catch {
-    return [];
-  }
-});
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const savedTasks = localStorage.getItem("focusforge_tasks");
+      return savedTasks ? JSON.parse(savedTasks) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const [taskTitle, setTaskTitle] = useState('');
 
@@ -59,7 +59,7 @@ const [tasks, setTasks] = useState(() => {
   return (
     <div className="min-h-screen bg-[#0B0F19] text-slate-100 p-6 md:p-10">
       <div className="max-w-5xl mx-auto space-y-8">
-        
+
         {/* --- Header Section --- */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
@@ -142,24 +142,21 @@ const [tasks, setTasks] = useState(() => {
             tasks.map((task) => (
               <div
                 key={task.id}
-                className={`backdrop-blur-md bg-slate-900/40 border rounded-xl p-4 flex items-center justify-between gap-4 shadow-md transition-all duration-200 group ${
-                  task.completed ? 'border-slate-900/40 opacity-60' : 'border-slate-800/60 hover:border-slate-700/50'
-                }`}
+                className={`backdrop-blur-md bg-slate-900/40 border rounded-xl p-4 flex items-center justify-between gap-4 shadow-md transition-all duration-200 group ${task.completed ? 'border-slate-900/40 opacity-60' : 'border-slate-800/60 hover:border-slate-700/50'
+                  }`}
               >
                 <div className="flex items-center gap-3.5 min-w-0">
                   <button
                     type="button"
                     onClick={() => handleToggleComplete(task.id)}
-                    className={`transition-colors shrink-0 focus:outline-none ${
-                      task.completed ? 'text-emerald-400' : 'text-slate-500 hover:text-slate-400'
-                    }`}
+                    className={`transition-colors shrink-0 focus:outline-none ${task.completed ? 'text-emerald-400' : 'text-slate-500 hover:text-slate-400'
+                      }`}
                   >
                     {task.completed ? <FiCheckCircle size={20} /> : <FiCircle size={20} />}
                   </button>
                   <div className="min-w-0">
-                    <p className={`text-sm font-medium transition-all truncate ${
-                      task.completed ? 'line-through text-slate-500' : 'text-slate-200'
-                    }`}>
+                    <p className={`text-sm font-medium transition-all truncate ${task.completed ? 'line-through text-slate-500' : 'text-slate-200'
+                      }`}>
                       {task.title}
                     </p>
                     <span className="text-[11px] text-slate-500 block mt-0.5 font-medium tracking-wide">
@@ -171,8 +168,8 @@ const [tasks, setTasks] = useState(() => {
                 <button
                   type="button"
                   onClick={() => handleDeleteTask(task.id)}
-                  className="p-2 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0"
-                  title="Delete task"
+                  className="p-2 text-rose-400/70 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all duration-200 shrink-0"
+                  title="Delete Task"
                 >
                   <FiTrash2 size={16} />
                 </button>

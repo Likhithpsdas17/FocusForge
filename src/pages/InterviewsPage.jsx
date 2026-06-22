@@ -276,10 +276,11 @@ const InterviewsPage = () => {
                         <button
                           type="button"
                           onClick={() => handleDeleteApplication(app.id)}
-                          className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-all md:opacity-0 group-hover:opacity-100 focus:opacity-100"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all"
                           title="Delete Application"
                         >
-                          <FiTrash2 size={15} />
+                          <FiTrash2 size={14} />
+                          <span className="text-xs font-medium">Delete</span>
                         </button>
                       </td>
                     </tr>

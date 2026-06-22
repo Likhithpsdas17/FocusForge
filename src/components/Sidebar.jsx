@@ -9,6 +9,7 @@ import {
   HiOutlineX,
 } from 'react-icons/hi'
 import { FaBolt } from 'react-icons/fa'
+// import SidebarFooter from './SidebarFooter';
 
 const navItems = [
   { path: '/', label: 'Dashboard', icon: HiOutlineViewGrid },
@@ -43,15 +44,22 @@ function Sidebar({ isOpen, onClose }) {
         `}
       >
         {/* Logo */}
+        {/* Logo */}
         <div className="flex items-center justify-between px-6 h-16 border-b border-border-default">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-indigo to-accent-violet flex items-center justify-center">
+          <NavLink
+            to="/"
+            onClick={onClose}
+            className="flex items-center gap-2.5 group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-indigo to-accent-violet flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
               <FaBolt className="text-white text-sm" />
             </div>
-            <span className="text-lg font-semibold text-text-primary tracking-tight">
+
+            <span className="text-lg font-semibold text-text-primary tracking-tight group-hover:text-white transition-colors">
               FocusForge
             </span>
-          </div>
+          </NavLink>
+
           <button
             onClick={onClose}
             className="md:hidden text-text-secondary hover:text-text-primary transition-colors"
@@ -96,26 +104,51 @@ function Sidebar({ isOpen, onClose }) {
           })}
         </nav>
 
-        {/* Bottom: Upgrade Card */}
+        {/* Bottom Footer Card */}
         <div className="px-4 pb-4">
-          <div className="glass-card p-4 text-center space-y-2">
-            <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-accent-indigo to-accent-violet flex items-center justify-center">
-              <FaBolt className="text-white text-sm" />
+          <div className="glass-card p-5 text-center">
+
+            {/* Logo */}
+            <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-accent-indigo to-accent-violet flex items-center justify-center shadow-lg">
+              <FaBolt className="text-white text-lg" />
             </div>
-            <h3 className="font-semibold text-white">
-              FocusForge
+
+            {/* Name */}
+            <h3 className="mt-4 text-white font-semibold text-base">
+              Likhith P S Das
             </h3>
 
-            <p className="text-sm text-slate-400">
-              Productivity & Interview Tracker
+            {/* Role */}
+            <p className="text-xs text-slate-400 mt-1">
+              Full Stack Developer
             </p>
 
-            <p className="text-xs text-slate-500">
-              Built by Likhith P S Das
+            {/* Email */}
+            <a
+              href="mailto:likhithdaz16@gmail.com"
+              className="block mt-3 text-xs text-slate-400 hover:text-purple-400 transition-colors break-all"
+            >
+              likhithdaz16@gmail.com
+            </a>
+
+            {/* Divider */}
+            <div className="border-t border-slate-800 my-4"></div>
+
+            {/* Assignment Text */}
+            <p className="text-[11px] text-slate-500 mb-3">
+              Built for Digital Heroes Assignment
             </p>
-            <button className="w-full py-1.5 rounded-lg bg-gradient-to-r from-accent-indigo to-accent-violet text-white text-xs font-medium hover:opacity-90 transition-opacity cursor-pointer">
-              View Project
-            </button>
+
+            {/* Button */}
+            <a
+              href="https://digitalheroesco.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-accent-indigo to-accent-violet text-white text-sm font-medium hover:opacity-90 transition-opacity text-center block"
+            >
+              Built for Digital Heroes
+            </a>
+
           </div>
         </div>
       </aside>
