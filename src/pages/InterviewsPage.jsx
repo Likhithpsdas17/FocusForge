@@ -3,16 +3,44 @@ import { FiPlus, FiTrash2, FiBriefcase, FiCalendar, FiTrendingUp, FiCheckCircle,
 
 const InterviewsPage = () => {
   // --- State ---
-  const [applications, setApplications] = useState(() => {
-    try {
-      const savedApps = localStorage.getItem(
-        "focusforge_interviews"
-      );
-      return savedApps ? JSON.parse(savedApps) : [];
-    } catch {
-      return [];
-    }
-  });
+const demoApplications = [
+  {
+    id: 1,
+    company: "Infosys",
+    role: "Frontend Developer",
+    dateApplied: "2026-06-20",
+    status: "Interview",
+    notes: "Technical round scheduled"
+  },
+  {
+    id: 2,
+    company: "TCS",
+    role: "React Developer",
+    dateApplied: "2026-06-18",
+    status: "Applied",
+    notes: "Waiting for OA"
+  },
+  {
+    id: 3,
+    company: "Accenture",
+    role: "Software Engineer",
+    dateApplied: "2026-06-15",
+    status: "OA",
+    notes: "Assessment completed"
+  }
+];
+
+const [applications, setApplications] = useState(() => {
+  try {
+    const savedApps = localStorage.getItem("focusforge_interviews");
+
+    return savedApps
+      ? JSON.parse(savedApps)
+      : demoApplications;
+  } catch {
+    return demoApplications;
+  }
+});
 
   const [form, setForm] = useState({
     company: '',

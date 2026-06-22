@@ -3,14 +3,38 @@ import { FiPlus, FiTrash2, FiCheckCircle, FiCircle, FiList, FiClock, FiCheckSqua
 
 const TasksPage = () => {
   // --- State ---
-  const [tasks, setTasks] = useState(() => {
-    try {
-      const savedTasks = localStorage.getItem("focusforge_tasks");
-      return savedTasks ? JSON.parse(savedTasks) : [];
-    } catch {
-      return [];
-    }
-  });
+const demoTasks = [
+  {
+    id: 1,
+    title: "Complete Digital Heroes Assignment",
+    completed: true,
+    createdAt: "Jun 22, 2026",
+  },
+  {
+    id: 2,
+    title: "Prepare React Interview Questions",
+    completed: false,
+    createdAt: "Jun 22, 2026",
+  },
+  {
+    id: 3,
+    title: "Deploy FocusForge on Vercel",
+    completed: false,
+    createdAt: "Jun 22, 2026",
+  },
+];
+
+const [tasks, setTasks] = useState(() => {
+  try {
+    const savedTasks = localStorage.getItem("focusforge_tasks");
+
+    return savedTasks
+      ? JSON.parse(savedTasks)
+      : demoTasks;
+  } catch {
+    return demoTasks;
+  }
+});
 
   const [taskTitle, setTaskTitle] = useState('');
 
